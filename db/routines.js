@@ -1,4 +1,20 @@
-const {rows} = require("pg/lib/defaults");
-const client = require("./client");
+const { rows } = require("pg/lib/defaults");
+const { client } = require("./client");
 
-module.exports = {};
+// async function getRoutineById() {}
+// async function getRoutinesWithoutActivities() {}
+// async function getAllRoutines() {}
+// async function getAllPublicRoutines() {}
+
+// module.exports = {
+//   getRoutineById,
+//   getRoutinesWithoutActivities,
+//   getAllRoutines,
+//   getAllPublicRoutines,
+//   getAllRoutinesByUser,
+//   getPublicRoutinesByUser,
+//   getPUblicRoutinesByActivity,
+//   createRoutine,
+//   updateRoutine,
+//   destroyRoutine,
+// };
