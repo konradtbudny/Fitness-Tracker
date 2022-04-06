@@ -79,27 +79,7 @@ async function createActivity({ name, description }) {
   }
 }
 
-/*async function updateActivity({ id,...fields}) {
-  const setString = Object.keys(fields).map((key, index) => `"${key}"=$${
-    index + 1
-}`).join(", ");
-if(setString.length===0){
-  return;
-}
-  try {
-      const {row:[activity]} = await client.query(`
-      UPDATE activities
-      SET ${setString}
-      WHERE id=${id}
-      RETURNING *;
-      `,Object.values(fields));
-    return activity;
 
-  } catch (error) {
-    throw error;
-  }}
-
-*/
 async function updateActivity({ id, name, description }) {
   try {
     const {
@@ -111,7 +91,6 @@ async function updateActivity({ id, name, description }) {
       [name, description, id]
     );
 
-    // console.log(activity);
     return activity;
   } catch (error) {
     throw error;
