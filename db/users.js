@@ -1,4 +1,3 @@
-// finish getUser
 const {rows} = require("pg/lib/defaults");
  const {client} = require("./client");
 const {getAllRoutinesByUser} = require("./routines")
@@ -17,21 +16,18 @@ async function createUser({username, password}) {
         throw error;
     }
 }
-async function getUser({username, password}) {
-
-}
 
 async function getUserById(userId) {
     try {
         const {rows: [user]} = await client.query(`
         SELECT id,username FROM users WHERE id=$1;
         `, [
-                userId
+            userId
             ]);
-        if (!user) {
-            return null;
-        }
-        //user.routine = await getAllRoutinesByUser(user.username);
+            if (!user) {
+                return null;
+            }
+            //user.routine = await getAllRoutinesByUser(user.username);
         return user;
     } catch (error) {
         throw error;
@@ -41,11 +37,30 @@ async function getUserByUsername(username) {
     try {
         const {rows: [user]} = await client.query(`
         SELECT * FROM users WHERE username=$1;
-        `, username);
+        `, [username]);
+        if(!user){
+            return null;
+        }
         return user;
     } catch (error) {
         throw error;
     }
+}
+async function getUser({username, password}) {
+    try{
+        
+        let user= await getUserByUsername(username);
+    if(user.password===password){
+        delete user.password;
+    }
+    else{
+        return null;
+    }
+    return user;
+    }catch(error){
+        throw error;
+    }
+
 }
 module.exports = {
     createUser,
