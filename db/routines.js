@@ -69,7 +69,22 @@ async function createRoutine({creatorId, isPublic, name, goal}) {
         throw error;
     }
 }
-async function getAllRoutinesByUser() {};
+async function getAllRoutinesByUser({username}) {
+    try {
+        const {rows: routines}=await client.query(`
+        SELECT routines.*, users.username AS "creatorName"
+        FROM routines
+        JOIN users ON routines."creatorId" = users.id
+        WHERE users.username=${username};
+        `)
+        console.log("!!!!!!!!!!!!!routines",routines[0].creatorName)
+        return attachActivitiesToRoutines(routines);
+        ;
+    } catch (error) {
+        throw error;
+    }
+};
+
 async function getPublicRoutinesByUser() {};
 async function getPUblicRoutinesByActivity() {};
 async function updateRoutine() {};
