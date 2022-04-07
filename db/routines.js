@@ -78,11 +78,6 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
   }
 }
 async function getAllRoutinesByUser({ username }) {
-  // ✕ selects and return an array of all routines made by user, includes their activities (1 ms)
-  // ✕ includes username, from users join, aliased as creatorName
-  // ✕ includes duration and count on activities, from routine_activities join
-  console.log("!!@@!!", process.env.DATABASE_URL);
-
   try {
     const { rows: routines } = await client.query(
       `
@@ -93,7 +88,6 @@ async function getAllRoutinesByUser({ username }) {
         `,
       [username]
     );
-    console.log("!!!!!!!!!!!!!routines", routines[0].creatorName);
     return attachActivitiesToRoutines(routines);
   } catch (error) {
     throw error;
