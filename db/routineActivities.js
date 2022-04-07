@@ -1,4 +1,12 @@
-const client = require("./client");
+const {client} = require("./client");
+
+ async function getRoutineActivityById(){};
+
+ async function updateRoutineActivity(){};
+
+ async function destroyRoutineActivity(){};
+
+ async function getRoutineActivitiesByRoutine(){};
 
 async function addActivityToRoutine({
   routineId,
@@ -11,8 +19,9 @@ async function addActivityToRoutine({
       rows: [routine_activity],
     } = await client.query(
       `
-        INSERT INTO routine_activity(routineId, activityId, count, duration)
-        VALUES $1,$2,$3,$4
+        INSERT INTO routine_activities("routineId", "activityId", count, duration)
+        VALUES ($1,$2,$3,$4)
+        ON CONFLICT("routineId", "activityId") DO NOTHING
         RETURNING *;
         `,
       [routineId, activityId, count, duration]
@@ -23,4 +32,9 @@ async function addActivityToRoutine({
   }
 }
 
-module.exports = { addActivityToRoutine };
+module.exports = { getRoutineActivityById,
+  updateRoutineActivity,
+  destroyRoutineActivity,
+  getRoutineActivitiesByRoutine,
+  addActivityToRoutine
+ };
