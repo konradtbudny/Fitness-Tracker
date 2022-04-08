@@ -1,12 +1,25 @@
-const {client} = require("./client");
+const { client } = require("./client");
 
- async function getRoutineActivityById(){};
+async function getRoutineActivityById() {}
 
- async function updateRoutineActivity(){};
+async function updateRoutineActivity() {}
 
- async function destroyRoutineActivity(){};
+async function destroyRoutineActivity() {}
 
- async function getRoutineActivitiesByRoutine(){};
+async function getRoutineActivitiesByRoutine({ id }) {
+  try {
+    const {
+      rows: [routine_activity],
+    } = await client.query(
+      `
+      SELECT * FROM routine_activity
+      RETURN *;
+`
+    );
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function addActivityToRoutine({
   routineId,
@@ -32,9 +45,10 @@ async function addActivityToRoutine({
   }
 }
 
-module.exports = { getRoutineActivityById,
+module.exports = {
+  getRoutineActivityById,
   updateRoutineActivity,
   destroyRoutineActivity,
   getRoutineActivitiesByRoutine,
-  addActivityToRoutine
- };
+  addActivityToRoutine,
+};
