@@ -94,8 +94,33 @@ async function getAllRoutinesByUser({ username }) {
   }
 }
 
-async function getPublicRoutinesByUser() {}
-async function getPUblicRoutinesByActivity() {}
+async function getPublicRoutinesByUser({ username }) {
+  try {
+    const { rows: routines } = await client.query(
+      `
+        SELECT routines.*, users.username AS "creatorName"
+        FROM routines
+        JOIN users ON routines."creatorId" = users.id
+        WHERE users.username=$1 AND "isPublic" = $2;
+        `,
+      [username, true]
+    );
+    return attachActivitiesToRoutines(routines);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getPublicRoutinesByActivity({ id }) {
+  try {
+    const { rows: routines } = await client.query(`
+    SELECT routines.*, users.username AS "creatorName"
+    FROM routines
+    
+    
+    `);
+  } catch (error) {}
+}
 async function updateRoutine() {}
 
 async function destroyRoutine() {}
@@ -106,7 +131,7 @@ module.exports = {
   getAllPublicRoutines,
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
-  getPUblicRoutinesByActivity,
+  getPublicRoutinesByActivity,
   createRoutine,
   updateRoutine,
   destroyRoutine,

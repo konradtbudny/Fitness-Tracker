@@ -1,22 +1,26 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
 const { createUser } = require("./users");
-const { createActivity,getAllActivities } = require("./activities");
-const{getRoutineActivityById,
+const { createActivity, getAllActivities } = require("./activities");
+const {
+  getRoutineActivityById,
   updateRoutineActivity,
   destroyRoutineActivity,
   getRoutineActivitiesByRoutine,
-  addActivityToRoutine}=require('./routineActivities');
+  addActivityToRoutine,
+} = require("./routineActivities");
 
-const {   getRoutineById,
+const {
+  getRoutineById,
   getRoutinesWithoutActivities,
   getAllRoutines,
-     getAllPublicRoutines,
-     getAllRoutinesByUser,
-     getPublicRoutinesByUser,
-     getPUblicRoutinesByActivity,
+  getAllPublicRoutines,
+  getAllRoutinesByUser,
+  getPublicRoutinesByUser,
+  getPublicRoutinesByActivity,
   createRoutine,
-     updateRoutine,
-     destroyRoutine, } = require("./routines");
+  updateRoutine,
+  destroyRoutine,
+} = require("./routines");
 const { client } = require("./client");
 
 async function dropTables() {

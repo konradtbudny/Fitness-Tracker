@@ -241,7 +241,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("getPublicRoutinesByUser", () => {
+    describe("getPublicRoutinesByUser", () => {
       let routine, user;
       beforeAll(async () => {
         user = await getUserById(1);
@@ -278,7 +278,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("getPublicRoutinesByActivity", () => {
+    describe("getPublicRoutinesByActivity", () => {
       let routine, activity;
       beforeAll(async () => {
         activity = await getActivityById(3);
