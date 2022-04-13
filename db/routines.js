@@ -141,7 +141,8 @@ async function updateRoutine({ id, isPublic, name, goal }) {
       `
         UPDATE routines
         SET "isPublic" = ($1), name = ($2), goal=($3) 
-        WHERE id=($4) RETURNING *
+        WHERE id=($4)
+        RETURNING *
         `,
       [isPublic, name, goal, id]
     );
@@ -153,24 +154,26 @@ async function updateRoutine({ id, isPublic, name, goal }) {
 
 async function destroyRoutine(id) {
   try {
-    await client.query(
+   const{rows :[routine_activities]}= await client.query(
       `
   DELETE FROM routine_activities 
-  WHERE "routineId" = $1
-  
+  WHERE "routineId" = ($1)
+  RETURNING *
   `,
       [id]
     );
+    console.log(routine_activities);
 
-    await client.query(
+    const{rows :[routine]}=await client.query(
       `
         DELETE FROM routines
-        WHERE id = $1
-        
+        WHERE id = ($1)
+        RETURNING *
         ;
       `,
       [id]
     );
+    return routine_activities;
   } catch (error) {
     throw error;
   }
