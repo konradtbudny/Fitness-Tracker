@@ -1,31 +1,18 @@
 // create an api router
 // attach other routers from files in this api directory (users, activities...)
 // export the api router
-const express = require('express');
 const cors=require('cors')
-const bcrypt = require('bcrypt')
-const {createUser} = require('../db/users');
-const {getAllActivities} = require("../db");
+const express = require('express');
 const apiRouter = express.Router();
-apiRouter.use(cors())
-apiRouter.post("/users/register", async (req, res, next) => {
-    try {
-        const username = req.params.username;
-        const password = req.params.password;
-        const user = await createUser({username, password})
-        console.log(user, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        res.send(user);
+const activitiesRouter = require('./activitiesRouter');
+const routineActivitiesRouter = require('./routineActivitiesRouter');
+const routinesRouter = require('./routinesRouter');
+const usersRouter = require('./usersRouter');
+apiRouter.use(cors());
+apiRouter.use(routinesRouter);
+apiRouter.use(activitiesRouter);
+apiRouter.use(usersRouter);
+apiRouter.use(routineActivitiesRouter);
 
-    } catch (error) {
-        next(error);
-    }
-});
-apiRouter.get("/activities", async (req, res, next) => {
-    try {
-        const activities = await getAllActivities();
-        res.send({activities});
-    } catch (error) {
-        next(error);
-    }
-});
-module.exports = apiRouter;
+module.exports=apiRouter;
+
