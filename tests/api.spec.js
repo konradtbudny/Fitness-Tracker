@@ -103,7 +103,7 @@ describe('API', () => {
                 expect(tooShortResponse.data).toBeTruthy();
             });
         });
-        describe('POST /users/login', () => {
+        xdescribe('POST /users/login', () => {
             it('Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.', async () => {
                 const {data} = await axios.post(`${API_URL}/api/users/login`, newUser);
                 token = data.token;
@@ -115,7 +115,7 @@ describe('API', () => {
                 expect(parsedToken.username).toEqual(registeredUser.username);
             });
         })
-        describe('GET /users/me', () => {
+        xdescribe('GET /users/me', () => {
             it('sends back users data if valid token is supplied in header', async () => {
                 const {data} = await axios.get(`${API_URL}/api/users/me`, {
                     headers: {
@@ -137,7 +137,7 @@ describe('API', () => {
                 expect(noTokenErrResp.data).toBeTruthy();
             });
         });
-        describe('GET /users/:username/routines', () => {
+        xdescribe('GET /users/:username/routines', () => {
             it('Gets a list of public routines for a particular user.', async () => {
                 const userId = 2;
                 const userWithRoutines = await getUserById(userId);
@@ -172,7 +172,7 @@ describe('API', () => {
                 expect(filteredActivity.description).toEqual(curls.description);
             });
         });
-        describe('POST /activities (*)', () => {
+        xdescribe('POST /activities (*)', () => {
             it('Creates a new activity', async () => {
                 const {data: respondedActivity} = await axios.post(`${API_URL}/api/activities`, activityToCreateAndUpdate, {
                     headers: {
@@ -184,7 +184,7 @@ describe('API', () => {
                 activityToCreateAndUpdate = respondedActivity;
             });
         });
-        describe('PATCH /activities/:activityId (*)', () => {
+        xdescribe('PATCH /activities/:activityId (*)', () => {
             it('Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)', async () => {
                 const newActivityData = {
                     name: 'Double Bicep Curls',
@@ -201,7 +201,7 @@ describe('API', () => {
                 expect(respondedActivity.description).toEqual(newActivityData.description);
             });
         });
-        describe('GET /activities/:activityId/routines', () => {
+        xdescribe('GET /activities/:activityId/routines', () => {
             it('Get a list of all public routines which feature that activity', async () => {
                 const [testRoutine] = await getAllPublicRoutines();
                 const [testActivity] = testRoutine.activities;
@@ -213,7 +213,7 @@ describe('API', () => {
             });
         });
     });
-    describe('Routines', () => {
+    xdescribe('Routines', () => {
         let routineToCreateAndUpdate = {
             isPublic: true,
             name: 'Elliptical Day',
@@ -330,7 +330,7 @@ describe('API', () => {
             });
         });
     });
-    describe('routine_activities', () => {
+    xdescribe('routine_activities', () => {
         let newRoutineActivityData = {
             routineId: 3,
             activityId: 8,
