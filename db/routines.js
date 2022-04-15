@@ -178,7 +178,8 @@ async function destroyRoutine(id) {
       `,
       [id]
     );
-    return routine_activities;
+    console.log(routine.length);
+    return routine_activities.length;
   } catch (error) {
     throw error;
   }
