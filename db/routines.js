@@ -1,5 +1,6 @@
 const { client } = require("./client");
 const { attachActivitiesToRoutines } = require("./activities");
+const { destroyRoutineActivity } = require("./routineActivities");
 
 async function getRoutineById(routineId) {
   try {
@@ -154,24 +155,30 @@ async function updateRoutine({ id, isPublic, name, goal }) {
 
 async function destroyRoutine(id) {
   try {
-   const{rows :routine_activities}= await client.query(
+    const {
+      rows: [routine_activities],
+    } = await client.query(
       `
   DELETE FROM routine_activities 
-  WHERE routine_activities."routineId" = ($1)
-  RETURNING *;
-  `, [id]);
-    console.log(routine_activities.length);
+  WHERE "routineId" = $1
+  ;
+  `,
+      [id]
+    );
+    console.log("!!!!!!!@@!!!!!!!", routine_activities);
 
-    const{rows :routine}=await client.query(
+    const {
+      rows: [routine],
+    } = await client.query(
       `
         DELETE FROM routines
-        WHERE id = ($1)
+        WHERE id = $1
         RETURNING *
         ;
       `,
       [id]
     );
-    console.log(routine.length)
+    console.log(routine.length);
     return routine_activities.length;
   } catch (error) {
     throw error;
