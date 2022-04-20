@@ -1,4 +1,5 @@
 // create the express server here
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const apiRouter = require("./api");
