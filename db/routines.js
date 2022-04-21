@@ -112,7 +112,7 @@ async function getPublicRoutinesByUser({ username }) {
   }
 }
 
-async function getPublicRoutinesByActivity({id} ) {
+async function getPublicRoutinesByActivity({ id }) {
   try {
     const { rows: routines } = await client.query(
       `
@@ -165,6 +165,7 @@ async function destroyRoutine(id) {
   `,
       [id]
     );
+    console.log("!!!!!!!@@!!!!!!!", routine_activities);
 
     const {
       rows: [routine],
@@ -177,7 +178,7 @@ async function destroyRoutine(id) {
       `,
       [id]
     );
-    return routine_activities.length;
+    return routine;
   } catch (error) {
     throw error;
   }
