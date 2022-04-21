@@ -1,6 +1,5 @@
 const {rows} = require("pg/lib/defaults");
 const {client} = require("./client");
-const {getAllRoutinesByUser} = require("./routines")
 const bcrypt=require('bcrypt');
 
 async function createUser({username, password}) {
@@ -19,6 +18,12 @@ async function createUser({username, password}) {
     } catch (error) {
         throw error;
     }
+}
+async function getAllUsers() {
+    const {rows} = await client.query(`SELECT *
+        FROM users;
+        `);
+    return rows;
 }
 
 async function getUserById(userId) {
@@ -69,5 +74,6 @@ module.exports = {
     createUser,
     getUser,
     getUserById,
-    getUserByUsername
+    getUserByUsername,
+    getAllUsers
 };
