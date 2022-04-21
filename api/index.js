@@ -5,7 +5,6 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
 const bcrypt = require('bcrypt');
-const {createUser} = require('../db/users');
 const apiRouter = express.Router();
 const {getUserById} = require('../db');
 
@@ -52,7 +51,6 @@ apiRouter.use("/users", usersRouter);
 const activitiesRouter = require("./activitiesRouter");
 
 apiRouter.use("/activities", activitiesRouter);
-module.exports = apiRouter;
 const cors = require('cors')
 const routineActivitiesRouter = require('./routineActivitiesRouter');
 const routinesRouter = require('./routinesRouter');

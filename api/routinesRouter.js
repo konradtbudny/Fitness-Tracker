@@ -1,9 +1,20 @@
 const express = require('express');
+const { getAllPublicRoutines } = require('../db');
 const routinesRouter = express.Router();
 /*
 GET /routines
 Return a list of public routines, include the activities with them
-
+*/
+routinesRouter.get("/",async(req,res,next)=>{
+    try {
+        const routines=await getAllPublicRoutines();
+        res.send(routines);
+        
+    } catch (error) {
+        next(error)
+    }
+})
+/*
 POST /routines (*)
 Create a new routine
 

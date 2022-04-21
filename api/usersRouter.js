@@ -1,6 +1,6 @@
 const express = require("express");
 const usersRouter = express.Router();
-const {createUser, getUserByUsername, getAllUsers, getUser} = require("../db");
+const {createUser, getUserByUsername, getAllUsers, getUser, getAllRoutinesByUser,getPublicRoutinesByUser} = require("../db");
 const {requireLogin, requireUser} = require("./utils");
 const jwt = require("jsonwebtoken");
 const bcrypt=require('bcrypt');
@@ -22,8 +22,6 @@ usersRouter.post("/register", async (req, res, next) => {
 
 usersRouter.get("/me",requireUser,async (req, res, next) => {
     const users=await getUserByUsername(req.user.username);
-    console.log(req.user.username,"11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
-    console.log(users)
     res.send(users);
 });
 
@@ -52,7 +50,8 @@ usersRouter.post("/login", async (req, res, next) => {
 });
 
 usersRouter.get("/:username/routines", async (req, res, next) => {
-    res.send("hello ");
+    const routines=await getPublicRoutinesByUser(req.params);
+    res.send(routines);
 });
 
 module.exports = usersRouter;
