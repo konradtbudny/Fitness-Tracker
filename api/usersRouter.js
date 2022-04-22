@@ -1,28 +1,31 @@
 const express = require("express");
 const usersRouter = express.Router();
-const {createUser, getUserByUsername, getAllUsers, getUser, getAllRoutinesByUser,getPublicRoutinesByUser} = require("../db");
-const {requireLogin, requireUser} = require("./utils");
+const {createUser, getUserByUsername, getPublicRoutinesByUser} = require("../db");
+const {requireUser} = require("./utils");
 const jwt = require("jsonwebtoken");
-const bcrypt=require('bcrypt');
-const { user } = require("pg/lib/defaults");
+const bcrypt = require('bcrypt');
 
 usersRouter.post("/register", async (req, res, next) => {
-    const {username, password} = req.body;
     try {
+        const {username, password} = req.body;
         if (password.length < 8) {
             next({name: "Password Too Short", message: "Password must be greater than 8 characters"});
         } else {
             const user = await createUser({username, password});
             res.send({user});
         }
-    } catch (error) {
-        next(error);
+    } catch ({name, description}) {
+        next({name, description})
     }
 });
 
-usersRouter.get("/me",requireUser,async (req, res, next) => {
-    const users=await getUserByUsername(req.user.username);
-    res.send(users);
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+    try {
+        const users = await getUserByUsername(req.user.username);
+        res.send(users);
+    } catch ({name, description}) {
+        next({name, description})
+    }
 });
 
 usersRouter.post("/login", async (req, res, next) => {
@@ -43,15 +46,18 @@ usersRouter.post("/login", async (req, res, next) => {
         } else {
             next({name: "IncorrectCredentialsError", message: "Username or password is incorrect"});
         }
-    } catch (error) {
-        console.log(error);
-        next(error);
+    } catch ({name, description}) {
+        next({name, description})
     }
 });
 
 usersRouter.get("/:username/routines", async (req, res, next) => {
-    const routines=await getPublicRoutinesByUser(req.params);
-    res.send(routines);
+    try {
+        const routines = await getPublicRoutinesByUser(req.params);
+        res.send(routines);
+    } catch ({name, description}) {
+        next({name, description})
+    }
 });
 
 module.exports = usersRouter;

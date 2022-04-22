@@ -1,6 +1,5 @@
-const {rows} = require("pg/lib/defaults");
 const {client} = require("./client");
-const bcrypt=require('bcrypt');
+const bcrypt = require('bcrypt');
 
 async function createUser({username, password}) {
     try {
@@ -10,8 +9,7 @@ async function createUser({username, password}) {
         INSERT INTO users(username, password)
         VALUES ($1,$2)
         ON CONFLICT (username) DO NOTHING
-        RETURNING *;
-        `, [username, hashedPassword]);
+        RETURNING *;`, [username, hashedPassword]);
         delete user.hashedPassword;
         delete user.password;
         return user;
@@ -19,32 +17,27 @@ async function createUser({username, password}) {
         throw error;
     }
 }
+
 async function getAllUsers() {
-    const {rows} = await client.query(`SELECT *
-        FROM users;
-        `);
+    const {rows} = await client.query(`SELECT * FROM users;`);
     return rows;
 }
 
 async function getUserById(userId) {
     try {
-        const {rows: [user]} = await client.query(`
-        SELECT id,username FROM users WHERE id=$1;
-        `, [userId]);
+        const {rows: [user]} = await client.query(`SELECT id,username FROM users WHERE id=$1;`, [userId]);
         if (!user) {
             return null;
         }
-        // user.routine = await getAllRoutinesByUser(user.username);
         return user;
     } catch (error) {
         throw error;
     }
 }
+
 async function getUserByUsername(username) {
     try {
-        const {rows: [user]} = await client.query(`
-        SELECT * FROM users WHERE username=$1;
-        `, [username]);
+        const {rows: [user]} = await client.query(`SELECT * FROM users WHERE username=$1;`, [username]);
         if (!user) {
             return null;
         }
@@ -53,12 +46,13 @@ async function getUserByUsername(username) {
         throw error;
     }
 }
+
 async function getUser({username, password}) {
     try {
 
         let user = await getUserByUsername(username);
-        const hashedPassword=user.password;
-        const passwordMatch=await bcrypt.compare(password, hashedPassword);
+        const hashedPassword = user.password;
+        const passwordMatch = await bcrypt.compare(password, hashedPassword);
         if (passwordMatch) {
             delete user.password;
             return user;
@@ -68,8 +62,8 @@ async function getUser({username, password}) {
     } catch (error) {
         throw error;
     }
-
 }
+
 module.exports = {
     createUser,
     getUser,
