@@ -4,7 +4,9 @@ const {
     createRoutine,
     updateRoutine,
     destroyRoutine,
-    getRoutineById
+    getRoutineById,
+    getRoutineActivitiesByRoutine,
+    addActivityToRoutine
 } = require('../db');
 
 const routinesRouter = express.Router();
@@ -63,18 +65,31 @@ routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
 
 })
 
-routinesRouter.post("/:routineId/activities", async (req, res, next) => {
+routinesRouter.post('/:routineId/activities', async (req, res, next) => {
     try {
-        let {routineId} = req.params;
-        let {activityId} = req.body
-        let routine = await getRoutineById(routineId);
-        routine.activityId = activityId
-        delete routine.id
-        res.send(routine);
-    } catch ({name, message}) {
-        next({name, message})
+      const {activityId, count, duration} = req.body;
+      const {routineId} = req.params;
+      const foundRoutineActivities = await getRoutineActivitiesByRoutine({id: routineId});
+      const existingRoutineActivities = foundRoutineActivities && foundRoutineActivities.filter(routineActivity => routineActivity.activityId === activityId);
+      if(existingRoutineActivities && existingRoutineActivities.length) {
+        next({
+          name: 'RoutineActivityExistsError',
+          message: `A routine_activity by that routineId ${routineId}, activityId ${activityId} combination already exists`
+        });
+      } else {
+        const createdRoutineActivity = await addActivityToRoutine({ routineId, activityId, count, duration });
+        if(createdRoutineActivity) {
+          res.send(createdRoutineActivity);
+        } else {
+          next({
+            name: 'FailedToCreate',
+            message: `There was an error adding activity ${activityId} to routine ${routineId}`
+          })
+        }
+      }
+    } catch (error) {
+      next(error);
     }
-
-})
+  });
 
 module.exports = routinesRouter;

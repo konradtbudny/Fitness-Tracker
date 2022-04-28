@@ -39,12 +39,16 @@ async function destroyRoutineActivity(id) {
 
 async function getRoutineActivitiesByRoutine({id}) {
     try {
-        const {rows} = await client.query(`SELECT * FROM routine_activities WHERE "routineId"=$1`, [id]);
-        return rows;
+      const {rows} = await client.query(`
+        SELECT * FROM routine_activities
+        WHERE "routineId" = ${id}
+      `);
+      return rows;
     } catch (error) {
-        throw error;
+      throw error;
     }
-}
+  }
+  
 
 async function addActivityToRoutine({routineId, activityId, count, duration}) {
     try {

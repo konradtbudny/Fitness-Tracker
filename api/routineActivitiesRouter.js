@@ -1,5 +1,5 @@
 const express = require('express');
-const {updateRoutineActivity, destroyRoutineActivity} = require('../db')
+const {updateRoutineActivity, destroyRoutineActivity, getRoutineActivityById, getRoutineById} = require('../db')
 const routineActivitiesRouter = express.Router();
 const {requireUser} = require('./utils');
 
@@ -12,8 +12,14 @@ routineActivitiesRouter.patch("/:routineActivityId", requireUser, async (req, re
             count,
             duration
         }
+        const checkUser=await getRoutineActivityById(routineActivityId)
+        const routine=await getRoutineById(checkUser.routineId)
+        if(routine.creatorId===req.user.id){
         const update = await updateRoutineActivity(data)
-        res.send(update)
+        res.send(update)}
+        else{
+            next({name:"OwnerIssue",message:"User is not an owner"});
+        }
     } catch ({name, message}) {
         next(name, message)
     }
@@ -21,8 +27,17 @@ routineActivitiesRouter.patch("/:routineActivityId", requireUser, async (req, re
 
 routineActivitiesRouter.delete("/:routineActivityId", requireUser, async (req, res, next) => {
     try {
-        const deleted = await destroyRoutineActivity({id: req.params.routineActivityId})
-        res.send(deleted)
+        let id= req.params.routineActivityId
+        console.log(req.body)
+        const check= await getRoutineActivityById(id)
+        const routine=await getRoutineById(checkUser.routineId)
+        console.log(check)
+        if(routine.creatorId===req.body.user.id){
+        const deleted = await destroyRoutineActivity(id)
+        res.send(deleted)}
+        else{
+
+        }
     } catch ({name, message}) {
         next({name, message})
     }
